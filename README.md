@@ -7,11 +7,15 @@ A Windows-focused operations toolkit for FiveM owners who want monitoring, backu
 | Test-FiveMEndpoint.ps1 | Check game TCP and txAdmin HTTP reachability |
 | Backup-FiveMServer.ps1 | Timestamped ZIP backups with retention |
 | Watch-FiveMProcess.ps1 | Detect process state changes and optionally alert Discord |
+| Test-FiveMConfig.ps1 | Flag inline secrets, duplicate resources, and configuration risks |
+| Get-FiveMResourceInventory.ps1 | Inventory resources, manifests, file counts, size, and modification time |
 
 ~~~powershell
 .\Test-FiveMEndpoint.ps1 -HostName 127.0.0.1 -GamePort 30120 -TxAdminPort 40120
 .\Backup-FiveMServer.ps1 -SourcePath C:\FiveM\server-data -DestinationPath D:\Backups\FiveM -RetentionDays 14
 .\Watch-FiveMProcess.ps1 -ProcessName FXServer -WebhookUrl $env:DISCORD_WEBHOOK_URL
+.\Test-FiveMConfig.ps1 -Path C:\FiveM\server-data\server.cfg
+.\Get-FiveMResourceInventory.ps1 -ResourcesPath C:\FiveM\server-data\resources
 ~~~
 
 Store webhook URLs and server keys outside source control. Test restores—not only backup creation. Never expose txAdmin publicly without appropriate access controls.
