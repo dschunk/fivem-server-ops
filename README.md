@@ -12,6 +12,9 @@ A Windows-focused operations toolkit for FiveM owners who want monitoring, backu
 | Get-FiveMServerStatus.ps1 | Query public FiveM endpoints for player, resource, version, and latency data |
 | Test-FiveMBackup.ps1 | Open, inspect, hash, and validate required files inside a ZIP backup |
 | Export-FiveMStatusPage.ps1 | Convert one or more status results into sanitized status-page JSON |
+| Get-FiveMLogSummary.ps1 | Classify recent errors, warnings, timeouts, disconnects, and resource activity |
+| Compare-FiveMResourceSnapshot.ps1 | Compare CSV resource inventories to identify added, removed, and changed resources |
+| Test-FiveMPortMatrix.ps1 | Test multiple game and txAdmin ports with service-aware results |
 
 ~~~powershell
 .\Test-FiveMEndpoint.ps1 -HostName 127.0.0.1 -GamePort 30120 -TxAdminPort 40120
@@ -22,6 +25,9 @@ A Windows-focused operations toolkit for FiveM owners who want monitoring, backu
 $status = .\Get-FiveMServerStatus.ps1 -BaseUri http://127.0.0.1:30120
 .\Test-FiveMBackup.ps1 -ArchivePath D:\Backups\fivem-latest.zip
 .\Export-FiveMStatusPage.ps1 -ServerStatus $status -OutputPath .\status.json
+.\Get-FiveMLogSummary.ps1 -Path C:\FiveM\logs\server.log
+.\Compare-FiveMResourceSnapshot.ps1 -ReferencePath before.csv -DifferencePath after.csv
+.\Test-FiveMPortMatrix.ps1 -HostName fivem.example.net -GamePort 30120,30121 -TxAdminPort 40120,40121
 ~~~
 
 ## Quality gates
