@@ -1,5 +1,7 @@
 # FiveM Server Ops
 
+> **Personal project notice:** This repository is maintained in a personal capacity and is not affiliated with, sponsored by, or endorsed by any current or former employer. Do not contribute employer confidential or proprietary information, non-public internal configurations, customer data, credentials, or employer work product. Examples should use personal/community infrastructure or generic test data.
+
 A Windows-focused operations toolkit for FiveM owners who want monitoring, backups, alerts, and safer maintenance—not just another start.bat file.
 
 | Script | Purpose |
