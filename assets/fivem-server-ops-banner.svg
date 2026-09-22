@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-labelledby="title desc">
+  <title id="title">FiveM Server Ops</title>
+  <desc id="desc">Windows operations tooling for FiveM servers by David Schunk.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#26323b"/>
+    </linearGradient>
+    <pattern id="grid" width="38" height="38" patternUnits="userSpaceOnUse">
+      <path d="M38 0H0V38" fill="none" stroke="#fff" stroke-opacity=".04"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="280" rx="16" fill="url(#bg)"/>
+  <rect width="1200" height="280" rx="16" fill="url(#grid)"/>
+  <rect width="8" height="280" rx="4" fill="#4f8f77"/>
+  <text x="70" y="76" fill="#91b9aa" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="3">WINDOWS OPERATIONS · MONITORING · BACKUP VALIDATION · EVIDENCE</text>
+  <text x="68" y="150" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="56" font-weight="750">FiveM Server Ops</text>
+  <text x="70" y="196" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="23">Infrastructure habits applied to game-server operations</text>
+  <line x1="70" y1="222" x2="1130" y2="222" stroke="#fff" stroke-opacity=".14"/>
+  <text x="70" y="253" fill="#aeb9c6" font-family="Segoe UI, Arial, sans-serif" font-size="15">Monitor state. Validate backups. Review configuration. Preserve evidence.</text>
+</svg>
