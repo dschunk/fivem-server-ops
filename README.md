@@ -1,69 +1,135 @@
+<p align="center">
+  <img src="assets/fivem-server-ops-banner.svg" alt="FiveM Server Ops — Windows operations tooling" width="100%" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/dschunk/fivem-server-ops/actions/workflows/validate-powershell.yml"><img src="https://github.com/dschunk/fivem-server-ops/actions/workflows/validate-powershell.yml/badge.svg" alt="PowerShell validation" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1f2937.svg" alt="MIT License" /></a>
+</p>
+
 # FiveM Server Ops
 
-> **Personal project notice:** This repository is maintained in a personal capacity and is not affiliated with, sponsored by, or endorsed by any current or former employer. Do not contribute employer confidential or proprietary information, non-public internal configurations, customer data, credentials, or employer work product. Examples should use personal/community infrastructure or generic test data.
+A focused Windows operations toolkit for FiveM server owners who want the same habits that matter in ordinary infrastructure: **monitoring, validated backups, configuration review, logging, inventory, status reporting, and visible failure**.
 
-A specialized Windows operations toolkit for FiveM server owners who want the same habits that matter in ordinary infrastructure: monitoring, validated backups, configuration review, logging, inventory, status reporting, and visible failure.
+This is intentionally an **operations project**, not a gameplay framework, resource pack, or server distribution.
 
-This is intentionally an **operations project**, not a gameplay framework or server pack.
+> The interesting part is not FiveM. The interesting part is applying production-minded operational discipline to a small Windows-hosted service.
 
-## Tool catalog
+## Start with the operational question
 
-| Script | Purpose |
+| Question | Tool |
 |---|---|
-| `Test-FiveMEndpoint.ps1` | Check game TCP and txAdmin HTTP reachability |
-| `Backup-FiveMServer.ps1` | Create timestamped ZIP backups with retention |
-| `Watch-FiveMProcess.ps1` | Detect process-state changes and optionally alert Discord |
-| `Test-FiveMConfig.ps1` | Flag inline secrets, duplicate resources, and configuration risks |
-| `Get-FiveMResourceInventory.ps1` | Inventory resources, manifests, file counts, size, and modification time |
-| `Get-FiveMServerStatus.ps1` | Query public endpoints for player, resource, version, and latency data |
-| `Test-FiveMBackup.ps1` | Open, inspect, hash, and validate required files inside a ZIP backup |
-| `Export-FiveMStatusPage.ps1` | Convert status results into sanitized status-page JSON |
-| `Get-FiveMLogSummary.ps1` | Classify recent errors, warnings, timeouts, disconnects, and resource activity |
-| `Compare-FiveMResourceSnapshot.ps1` | Identify added, removed, and changed resources between inventories |
-| `Test-FiveMPortMatrix.ps1` | Test multiple game and txAdmin ports with service-aware results |
+| Is the game service and txAdmin reachable? | `Test-FiveMEndpoint.ps1` |
+| Is the configuration safe to commit or deploy? | `Test-FiveMConfig.ps1` |
+| What resources are installed? | `Get-FiveMResourceInventory.ps1` |
+| What is the current public server state? | `Get-FiveMServerStatus.ps1` |
+| Did anything change in the resource set? | `Compare-FiveMResourceSnapshot.ps1` |
+| Is the backup archive actually readable and complete? | `Test-FiveMBackup.ps1` |
+| What is happening in recent logs? | `Get-FiveMLogSummary.ps1` |
+| Are expected ports reachable? | `Test-FiveMPortMatrix.ps1` |
+| Did the process state change? | `Watch-FiveMProcess.ps1` |
+| Can I publish a sanitized status payload? | `Export-FiveMStatusPage.ps1` |
 
-## Example workflow
+## Example operational workflow
 
 ```powershell
-# Is the service reachable?
+# 1. Check reachability
 .\Test-FiveMEndpoint.ps1 -HostName 127.0.0.1 -GamePort 30120 -TxAdminPort 40120
 
-# Is the configuration safe to commit or deploy?
+# 2. Review configuration before deployment
 .\Test-FiveMConfig.ps1 -Path C:\FiveM\server-data\server.cfg
 
-# What resources are actually installed?
+# 3. Inventory what is installed
 .\Get-FiveMResourceInventory.ps1 -ResourcesPath C:\FiveM\server-data\resources
 
-# Create and then validate a backup
+# 4. Create a backup
 .\Backup-FiveMServer.ps1 `
     -SourcePath C:\FiveM\server-data `
     -DestinationPath D:\Backups\FiveM `
     -RetentionDays 14
 
+# 5. Validate the backup instead of trusting the job result
 .\Test-FiveMBackup.ps1 -ArchivePath D:\Backups\fivem-latest.zip
 
-# Summarize operational noise
+# 6. Summarize recent operational noise
 .\Get-FiveMLogSummary.ps1 -Path C:\FiveM\logs\server.log
 ```
+
+## What this project teaches beyond FiveM
+
+The repo is intentionally useful as a small infrastructure case study.
+
+### Monitoring
+
+Check state repeatedly and make **changes in state** visible. “It is down” is useful; “it changed from healthy to unreachable at 03:14” is better.
+
+### Backup validation
+
+A successful ZIP creation is not proof that the backup is usable. Open the archive, inspect it, hash it, and test restore assumptions.
+
+### Configuration safety
+
+Configuration files often accumulate secrets, duplicate entries, stale resources, and undocumented assumptions. Review them before deployment.
+
+### Inventory
+
+Operators should know what is actually installed, not what somebody remembers installing.
+
+### Logging
+
+Logs need classification and summarization before they become useful evidence.
+
+### Public status
+
+Status output must be sanitized. Internal hostnames, private paths, administrative ports, credentials, and infrastructure details do not belong in a public feed.
 
 ## Operational rules
 
 - **Do not store server keys or webhook URLs in source control.** Use environment variables or another protected secret store.
 - **A successful backup job is not proof of recoverability.** Validate archives and test restores.
 - **Do not expose txAdmin directly to the public internet without appropriate access controls.**
-- **Monitor state changes, not just current state.** An alert is more useful when it explains what changed.
-- **Sanitize public status data.** Internal hostnames, administrative ports, paths, secrets, and private infrastructure details do not belong on a public status page.
-- **Collect before changing.** Logs and configuration snapshots are easiest to interpret before someone starts experimenting.
+- **Monitor state changes, not just current state.**
+- **Sanitize public status data.**
+- **Collect before changing.** Logs and configuration snapshots are easiest to interpret before experimentation begins.
 
 ## Quality gates
 
-[![Validate PowerShell](https://github.com/dschunk/fivem-server-ops/actions/workflows/validate-powershell.yml/badge.svg)](https://github.com/dschunk/fivem-server-ops/actions/workflows/validate-powershell.yml)
-
 Every push and pull request is parsed on a Windows runner and checked with PSScriptAnalyzer error rules.
 
-## Related engineering work
+[![Validate PowerShell](https://github.com/dschunk/fivem-server-ops/actions/workflows/validate-powershell.yml/badge.svg)](https://github.com/dschunk/fivem-server-ops/actions/workflows/validate-powershell.yml)
 
-This repository is a specialized branch of the same operational philosophy used across the broader portfolio:
+## Classroom / lab use
+
+This repository can be useful in PowerShell, Windows administration, or operations courses because it is small enough to understand end-to-end.
+
+Possible exercises:
+
+- add structured error handling to one collector;
+- compare “backup completed” with “backup validated”;
+- create a synthetic resource snapshot and detect changes;
+- design a sanitized public status schema;
+- classify log lines into operational categories;
+- explain which details should never be exposed publicly;
+- extend a script while preserving safe defaults and structured output.
+
+For broader course material, see the [Teaching & Classroom Guide](https://github.com/dschunk/dschunk/blob/main/docs/CLASSROOM.md).
+
+## Security and project boundary
+
+This repository is maintained in a personal capacity and is not affiliated with, sponsored by, or endorsed by any current or former employer.
+
+Do not contribute:
+
+- employer confidential or proprietary information;
+- production credentials or server keys;
+- private webhook URLs;
+- private infrastructure inventories;
+- customer data;
+- internal-only configurations.
+
+Examples should use personal/community infrastructure or generic test data.
+
+## Related engineering work
 
 - [Windows IT Toolkit / SchunkOps](https://github.com/dschunk/windows-it-toolkit) — general Windows and infrastructure operations tooling
 - [Infrastructure Dashboard](https://github.com/dschunk/infrastructure-dashboard) — public operations-interface case study
